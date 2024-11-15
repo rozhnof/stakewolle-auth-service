@@ -12,6 +12,7 @@ type UserRepository interface {
 	Create(ctx context.Context, user *models.User) (*models.User, error)
 	GetByID(ctx context.Context, userID uuid.UUID) (*models.User, error)
 	GetByUsername(ctx context.Context, username string) (*models.User, error)
+	GetUserIDByReferralCode(ctx context.Context, referralCode string) (*uuid.UUID, error)
 	List(ctx context.Context) ([]models.User, error)
 	Update(ctx context.Context, user *models.User) (*models.User, error)
 	Delete(ctx context.Context, userID uuid.UUID) (*time.Time, error)

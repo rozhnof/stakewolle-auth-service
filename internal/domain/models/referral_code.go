@@ -2,13 +2,10 @@ package models
 
 import (
 	"time"
-
-	"github.com/google/uuid"
 )
 
 type ReferralCode struct {
-	ID        uuid.UUID
-	UserID    uuid.UUID
+	Code      string
 	ExpiredAt time.Time
 }
 

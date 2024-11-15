@@ -11,7 +11,6 @@ const tokenLength = 255
 type RefreshToken struct {
 	Token     string
 	ExpiredAt time.Time
-	IsRevoked bool
 }
 
 func NewRefreshToken(ttl time.Duration) (RefreshToken, error) {
@@ -29,7 +28,7 @@ func NewRefreshToken(ttl time.Duration) (RefreshToken, error) {
 }
 
 func (t *RefreshToken) Valid() bool {
-	return t.ExpiredAt.After(time.Now()) && !t.IsRevoked
+	return t.ExpiredAt.After(time.Now())
 }
 
 func generateRandomString(length int) (string, error) {

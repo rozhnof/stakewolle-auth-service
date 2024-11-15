@@ -5,6 +5,7 @@ import (
 	"log/slog"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/pkg/errors"
 	"github.com/rozhnof/stakewolle-auth-service/internal/domain/models"
 	"github.com/rozhnof/stakewolle-auth-service/internal/domain/repository"
@@ -22,12 +23,11 @@ type PasswordManager interface {
 }
 
 const redisTTL = time.Hour * 60
+const referralCodeTTL = time.Hour * 240
 
 type Dependencies struct {
 	UserRepository     repository.UserRepository
-	SessionRepository  repository.SessionRepository
 	UserCache          repository.UserCache
-	SessionCache       repository.SessionCache
 	TransactionManager repository.TransactionManager
 	TokenManager       TokenManager
 	PasswordManager    PasswordManager
@@ -38,8 +38,8 @@ func (d Dependencies) Valid() error {
 		return errors.New("missing user repository")
 	}
 
-	if d.SessionRepository == nil {
-		return errors.New("missing session repository")
+	if d.TokenManager == nil {
+		return errors.New("missing token manager")
 	}
 
 	if d.TransactionManager == nil {
@@ -52,10 +52,6 @@ func (d Dependencies) Valid() error {
 
 	if d.UserCache == nil {
 		return errors.New("missing user cache")
-	}
-
-	if d.SessionCache == nil {
-		return errors.New("missing session cache")
 	}
 
 	return nil
@@ -88,10 +84,18 @@ func (s *UserService) Register(ctx context.Context, username string, password st
 		return nil, err
 	}
 
-	user := models.User{
-		Username:     username,
-		HashPassword: hashPassword,
+	var referrerID *uuid.UUID
+
+	if referralCode != "" {
+		userID, err := s.UserRepository.GetUserIDByReferralCode(ctx, referralCode)
+		if err != nil {
+			return nil, err
+		}
+
+		referrerID = userID
 	}
+
+	user := models.NewUser(username, hashPassword, referrerID)
 
 	createdUser, err := s.UserRepository.Create(ctx, &user)
 	if err != nil {
