@@ -1,7 +1,14 @@
 CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    referrer_id REFERENCES users(id)
     username VARCHAR(50) NOT NULL UNIQUE,
     hash_password TEXT NOT NULL,
+    deleted_at TIMESTAMP
+);
+
+CREATE TABLE referral_code (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES users(id),
     deleted_at TIMESTAMP
 );
 

@@ -1,4 +1,4 @@
-package repository
+package pgrepo
 
 const sessionQueryCreate = `
 	INSERT INTO session (

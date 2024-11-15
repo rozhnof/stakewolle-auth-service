@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type RegisterRequest struct {
@@ -12,8 +13,13 @@ type RegisterRequest struct {
 }
 
 type RegisterResponse struct {
-	User
+	UserID   uuid.UUID `json:"user_id"`
+	Username string    `json:"username"`
 }
+
+const (
+	queryParamReferralCode = "ref"
+)
 
 // Register @Summary User registration
 // @Description Registers a new user with username and password
@@ -35,14 +41,17 @@ func (h *AuthHandler) Register(c *gin.Context) {
 		return
 	}
 
-	registeredUser, err := h.userService.Register(ctx, request.Username, request.Password)
+	referralCode := c.Query(queryParamReferralCode)
+
+	registeredUser, err := h.userService.Register(ctx, request.Username, request.Password, referralCode)
 	if err != nil {
 		c.String(http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	response := RegisterResponse{
-		User: UserToDTO(*registeredUser),
+		UserID:   registeredUser.ID,
+		Username: registeredUser.Username,
 	}
 
 	c.JSON(http.StatusOK, response)

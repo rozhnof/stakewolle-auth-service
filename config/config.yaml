@@ -1,0 +1,11 @@
+mode: debug # debug, release
+
+server:
+  address: :8080
+
+logging:
+  level: debug
+
+tokens:
+  access_ttl: 30m
+  refresh_ttl: 1M

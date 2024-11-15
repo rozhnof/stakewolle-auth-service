@@ -12,7 +12,11 @@ type UserEntity struct {
 }
 
 func userToModel(user *UserEntity) *models.User {
-	return &models.User{}
+	return &models.User{
+		ID:           user.ID,
+		Username:     user.Username,
+		HashPassword: user.HashPassword,
+	}
 }
 
 func usersToModel(userEntityList []UserEntity) []models.User {
@@ -25,7 +29,11 @@ func usersToModel(userEntityList []UserEntity) []models.User {
 }
 
 func userFromModel(user *models.User) *UserEntity {
-	return &UserEntity{}
+	return &UserEntity{
+		ID:           user.ID,
+		Username:     user.Username,
+		HashPassword: user.HashPassword,
+	}
 }
 
 func usersFromModel(userList []models.User) []UserEntity {

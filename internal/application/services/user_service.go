@@ -79,7 +79,7 @@ func NewUserService(d Dependencies, log *slog.Logger, tracer trace.Tracer) (*Use
 	}, nil
 }
 
-func (s *UserService) Register(ctx context.Context, username string, password string) (*models.User, error) {
+func (s *UserService) Register(ctx context.Context, username string, password string, referralCode string) (*models.User, error) {
 	ctx, span := s.tracer.Start(ctx, "UserService.Register")
 	defer span.End()
 

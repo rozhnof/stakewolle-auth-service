@@ -19,11 +19,11 @@ func sessionToModel(session *SessionEntity) *models.Session {
 	return &models.Session{
 		ID:     session.ID,
 		UserID: session.UserID,
-		// RefreshToken: models.RefreshToken{
-		// 	Token:     session.RefreshToken,
-		// 	ExpiredAt: session.ExpiredAt,
-		// 	IsRevoked: session.IsRevoked,
-		// },
+		RefreshToken: models.RefreshToken{
+			Token:     session.RefreshToken,
+			ExpiredAt: session.ExpiredAt,
+			IsRevoked: session.IsRevoked,
+		},
 	}
 }
 
@@ -38,11 +38,11 @@ func sessionsToModel(sessionEntityList []SessionEntity) []models.Session {
 
 func sessionFromModel(session *models.Session) *SessionEntity {
 	return &SessionEntity{
-		ID:     session.ID,
-		UserID: session.UserID,
-		// RefreshToken: session.RefreshToken.Token,
-		// ExpiredAt:    session.RefreshToken.ExpiredAt,
-		// IsRevoked:    session.RefreshToken.IsRevoked,
+		ID:           session.ID,
+		UserID:       session.UserID,
+		RefreshToken: session.RefreshToken.Token,
+		ExpiredAt:    session.RefreshToken.ExpiredAt,
+		IsRevoked:    session.RefreshToken.IsRevoked,
 	}
 }
 
