@@ -27,15 +27,6 @@ func sessionToModel(session *SessionEntity) *models.Session {
 	}
 }
 
-func sessionsToModel(sessionEntityList []SessionEntity) []models.Session {
-	sessionList := make([]models.Session, 0, len(sessionEntityList))
-	for _, sessionEntity := range sessionEntityList {
-		sessionList = append(sessionList, *sessionToModel(&sessionEntity))
-	}
-
-	return sessionList
-}
-
 func sessionFromModel(session *models.Session) *SessionEntity {
 	return &SessionEntity{
 		ID:           session.ID,
@@ -44,13 +35,4 @@ func sessionFromModel(session *models.Session) *SessionEntity {
 		ExpiredAt:    session.RefreshToken.ExpiredAt,
 		IsRevoked:    session.RefreshToken.IsRevoked,
 	}
-}
-
-func sessionsFromModel(sessionList []models.Session) []SessionEntity {
-	sessionEntityList := make([]SessionEntity, 0, len(sessionList))
-	for _, session := range sessionList {
-		sessionEntityList = append(sessionEntityList, *sessionFromModel(&session))
-	}
-
-	return sessionEntityList
 }

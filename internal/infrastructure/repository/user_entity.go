@@ -7,6 +7,7 @@ import (
 
 type UserEntity struct {
 	ID           uuid.UUID `db:"id"`
+	ReferrerID   uuid.UUID `db:"referrer_id"`
 	Username     string    `db:"username"`
 	HashPassword string    `db:"hash_password"`
 }
@@ -34,13 +35,4 @@ func userFromModel(user *models.User) *UserEntity {
 		Username:     user.Username,
 		HashPassword: user.HashPassword,
 	}
-}
-
-func usersFromModel(userList []models.User) []UserEntity {
-	userEntityList := make([]UserEntity, 0, len(userList))
-	for _, user := range userList {
-		userEntityList = append(userEntityList, *userFromModel(&user))
-	}
-
-	return userEntityList
 }

@@ -36,7 +36,7 @@ func (s *UserRepository) Create(ctx context.Context, user *models.User) (*models
 
 	db := s.txManager.TxOrDB(ctx)
 
-	rows, err := db.Query(ctx, userQueryCreate, userEntity.Username, userEntity.HashPassword)
+	rows, err := db.Query(ctx, userQueryCreate, userEntity.Username, userEntity.ReferrerID, userEntity.HashPassword)
 	if err != nil {
 		return nil, err
 	}
@@ -114,9 +114,11 @@ func (s *UserRepository) Update(ctx context.Context, user *models.User) (*models
 	ctx, span := s.tracer.Start(ctx, "UserRepository.Update")
 	defer span.End()
 
+	userEntity := userFromModel(user)
+
 	db := s.txManager.TxOrDB(ctx)
 
-	rows, err := db.Query(ctx, userQueryUpdate, user.Username, user.HashPassword)
+	rows, err := db.Query(ctx, userQueryUpdate, userEntity.Username, userEntity.ReferrerID, userEntity.HashPassword)
 	if err != nil {
 		return nil, err
 	}

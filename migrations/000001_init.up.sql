@@ -9,6 +9,7 @@ CREATE TABLE users (
 CREATE TABLE referral_code (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID REFERENCES users(id),
+    expired_at TIMESTAMP,
     deleted_at TIMESTAMP
 );
 
